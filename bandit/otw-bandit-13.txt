@@ -1,0 +1,92 @@
+
+[ OverTheWire    ]    https://overthewire.org/
+[ Bandit         ]    https://overthewire.org/wargames/bandit/
+[ Level 13       ]    https://overthewire.org/wargames/bandit/bandit13.html
+
+
+-----[
+-----[  LEVEL GOAL
+-----[
+
+The password for the next level is stored in the file data.txt, which is a
+hexdump of a file that has been repeatedly compressed. For this level it may be
+useful to create a directory under /tmp in which you can work using mkdir.
+
+For example: mkdir /tmp/myname123.
+
+Then copy the datafile using cp, and rename it using mv (read the manpages!)
+
+
+-----[
+-----[  SOLUTION
+-----[
+
+This one appears to be an interesting multi-part challenge:
+
+1. Convert the hexdump in data.txt to a valid binary file
+2. Uncompress the file until we get something readable
+3. ???
+4. Bingo
+
+As the description says, start by copying data.txt to /tmp/ticktock because ~/
+is read-only. Once in /tmp/ticktock, get to work figuring out the correct syntax
+for `xxd' to convert the hexdump to a binary file.
+
+With the new data.bin file at hand, start decompressing the file, then check the
+file type, decompress again, check the file type again, and repeat...
+Eventually, there's a file containing the bingo.
+
+There may be a more elegant solution to this!
+
+
+[[  terminal ]]
+
+bandit12@melinda:~$ ls -al
+total 24
+drwxr-xr-x   2 root     root     4096 Nov 16  2014 .
+drwxr-xr-x 167 root     root     4096 Jul  9 16:27 ..
+-rw-r--r--   1 root     root      220 Apr  9  2014 .bash_logout
+-rw-r--r--   1 root     root     3637 Apr  9  2014 .bashrc
+-rw-r--r--   1 root     root      675 Apr  9  2014 .profile
+-rw-r-----   1 bandit13 bandit12 2546 Nov 14  2014 data.txt
+bandit12@melinda:~$ mkdir /tmp/ticktock && cp data.txt /tmp/ticktock
+bandit12@melinda:~$ cd /tmp/ticktock && file data.txt
+data.txt: ASCII text
+bandit12@melinda:/tmp/ticktock$ cat data.txt | xxd -r >data.bin
+bandit12@melinda:/tmp/ticktock$ file data.bin
+data.bin: gzip compressed data, was "data2.bin", from Unix, last modified: Fri Nov 14 10:32:20 2014, max compression
+bandit12@melinda:/tmp/ticktock$ mv data.bin data.gz && gunzip data.gz
+bandit12@melinda:/tmp/ticktock$ ls
+data  data.txt  xxd
+bandit12@melinda:/tmp/ticktock$ file data
+data: bzip2 compressed data, block size = 900k
+bandit12@melinda:/tmp/ticktock$ bzip2 -d data
+bzip2: Can't guess original name for data -- using data.out
+bandit12@melinda:/tmp/ticktock$ file data.out
+data.out: gzip compressed data, was "data4.bin", from Unix, last modified: Fri Nov 14 10:32:20 2014, max compression
+bandit12@melinda:/tmp/ticktock$ mv data.out data.gz && gunzip data.gz
+bandit12@melinda:/tmp/ticktock$ file data
+data: POSIX tar archive (GNU)
+bandit12@melinda:/tmp/ticktock$ tar -xvf data
+data5.bin
+bandit12@melinda:/tmp/ticktock$ file data5.bin
+data5.bin: POSIX tar archive (GNU)
+bandit12@melinda:/tmp/ticktock$ tar -xvf data5.bin
+data6.bin
+bandit12@melinda:/tmp/ticktock$ tar -xvf data6.bin
+data8.bin
+bandit12@melinda:/tmp/ticktock$ tar -xvf data8.bin
+bandit12@melinda:/tmp/ticktock$ file data8.bin
+data8.bin: gzip compressed data, was "data9.bin", from Unix, last modified: Fri Nov 14 10:32:20 2014, max compression
+bandit12@melinda:/tmp/ticktock$ mv data8.bin data8.gz && gunzip data8.gz
+bandit12@melinda:/tmp/ticktock$ ls
+data  data.txt  data5.bin  data6.bin  data8
+bandit12@melinda:/tmp/ticktock$ file data8
+data8: ASCII text
+bandit12@melinda:/tmp/ticktock$ cat data8
+The password is 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
+
+[[ /terminal ]]
+
+
+|=------------ eof -------------=|

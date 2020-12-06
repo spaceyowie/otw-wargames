@@ -1,0 +1,36 @@
+
+[ OverTheWire    ]    https://overthewire.org/
+[ Bandit         ]    https://overthewire.org/wargames/bandit/
+[ Level 7        ]    https://overthewire.org/wargames/bandit/bandit7.html
+
+
+-----[
+-----[  LEVEL GOAL
+-----[
+
+The password for the next level is stored **somewhere on the server** and has
+all of the following properties:
+- owned by user bandit7
+- owned by group bandit6
+- 33 bytes in size
+
+
+-----[
+-----[  SOLUTION
+-----[
+
+Taking Level 6 one step further, the bingo for Level 7 is *somewhere* on the
+box - again, the `find' command will be key to finding the file.
+
+
+[[  terminal ]]
+
+bandit6@melinda:~$ find / -group bandit6 -user bandit7 -size 33c 2>/dev/null
+/var/lib/dpkg/info/bandit7.password
+bandit6@melinda:~$ cat /var/lib/dpkg/info/bandit7.password
+HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs
+
+[[ /terminal ]]
+
+
+|=------------ eof -------------=|

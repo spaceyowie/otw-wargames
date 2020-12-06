@@ -1,0 +1,69 @@
+
+[ OverTheWire    ]    https://overthewire.org/
+[ Bandit         ]    https://overthewire.org/wargames/bandit/
+[ Level 6        ]    https://overthewire.org/wargames/bandit/bandit6.html
+
+
+-----[
+-----[  LEVEL GOAL
+-----[
+
+The password for the next level is stored in a file somewhere under the `inhere'
+directory and has all of the following properties:
+- human-readable
+- 1033 bytes in size
+- not executable
+
+
+-----[
+-----[  SOLUTION
+-----[
+
+After sussing out the `inhere' directory, it becomes clear that manually
+processing the files in each subdirectory is going to waste a lot of time.
+To make this easier and quicker, the `find' command has helpful options.
+
+
+[[  terminal ]]
+
+bandit5@melinda:~$ ls -al
+total 24
+drwxr-xr-x   3 root root    4096 Nov 14  2014 .
+drwxr-xr-x 167 root root    4096 Jul  9 16:27 ..
+-rw-r--r--   1 root root     220 Apr  9  2014 .bash_logout
+-rw-r--r--   1 root root    3637 Apr  9  2014 .bashrc
+-rw-r--r--   1 root root     675 Apr  9  2014 .profile
+drwxr-x---  22 root bandit5 4096 Nov 14  2014 inhere
+bandit5@melinda:~$ ls -al inhere/
+total 88
+drwxr-x--- 22 root bandit5 4096 Nov 14  2014 .
+drwxr-xr-x  3 root root    4096 Nov 14  2014 ..
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere00
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere01
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere02
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere03
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere04
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere05
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere06
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere07
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere08
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere09
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere10
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere11
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere12
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere13
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere14
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere15
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere16
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere17
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere18
+drwxr-x---  2 root bandit5 4096 Nov 14  2014 maybehere19
+bandit5@melinda:~$ find inhere/* -size 1033c
+inhere/maybehere07/.file2
+bandit5@melinda:~$ cat inhere/maybehere07/.file2
+DXjZPULLxYr17uwoI01bNLQbtFemEgo7
+
+[[ /terminal ]]
+
+
+|=------------ eof -------------=|
